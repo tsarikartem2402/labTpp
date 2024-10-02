@@ -72,3 +72,9 @@ END
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2024-10-02 13:07:19.089
 !MESSAGE Boot project REMOVED: lab2
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-10-02 13:12:20.240
+!MESSAGE Classpath changed for project: lab2
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-10-02 13:12:20.245
+!MESSAGE Boot project ADDED: lab2
