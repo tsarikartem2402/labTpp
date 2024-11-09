@@ -1,0 +1,9 @@
+2024-10-02 12:38:46,770 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-10-02 12:39:04,963 [Worker-38: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.example:spring-boot-calculator:0.0.1-SNAPSHOT @ D:\gitrepo\labTpp\lab2\pom.xml.
+2024-10-02 12:39:05,752 [Worker-38: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-10-02 12:39:05,844 [Worker-23: Updating Maven Dependencies] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.example:spring-boot-calculator:0.0.1-SNAPSHOT @ D:\gitrepo\labTpp\lab2\pom.xml.
+2024-10-02 12:39:06,216 [Worker-38: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\gitrepo\labTpp\lab2\src\test\resources
+2024-10-02 12:39:07,397 [Worker-9: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-10-02 12:39:07,412 [Worker-9: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-10-02 12:39:07,415 [Worker-9: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\gitrepo\labTpp\lab2\src\test\resources
+2024-10-02 12:39:17,791 [main] INFO  o.e.m.jdt.internal.UnitTestSupport - Updating CalculatorTests from maven configuration
