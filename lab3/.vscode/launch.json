@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Lab3Application<lab3>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ttp.lab3.Lab3Application",
+            "projectName": "lab3",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

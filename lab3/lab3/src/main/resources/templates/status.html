@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SQL Query Executor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .query-form {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: green;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .example-queries {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+<body>
+    <h1>SQL Query Executor</h1>
+
+    <div class="query-form">
+        <form th:action="@{/query}" method="post">
+            <div>
+                <textarea name="query" th:text="${query}" placeholder="Введіть SQL запит..."></textarea>
+            </div>
+            <button type="submit">Виконати запит</button>
+        </form>
+    </div>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${message}" class="success" th:text="${message}"></div>
+
+    <div th:if="${result}">
+        <h2>Результат запиту:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th th:each="column : ${result[0].keySet()}" th:text="${column}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="row : ${result}">
+                    <td th:each="column : ${row.keySet()}" th:text="${row.get(column)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
