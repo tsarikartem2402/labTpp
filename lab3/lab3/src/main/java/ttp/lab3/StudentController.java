@@ -1,43 +1,66 @@
 package ttp.lab3;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
+@Controller
 @RequestMapping("/students")
 public class StudentController {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
+
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public String showStudentPage(Model model) {
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students"; 
     }
 
-    @GetMapping("/{id}")
-    public Optional<Student> getStudentById(@PathVariable int id) { 
-        return studentRepository.findById(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/save")
+    public String saveStudent(@ModelAttribute Student student, Model model) {
+        String result = studentService.saveStudent(student);
+        model.addAttribute("message", result);
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students";
     }
 
-    @PostMapping
-    public String createStudent(@RequestBody Student student) {
-        studentRepository.save(student);
-        return "Student created successfully!";
+
+    @PostMapping("/search")
+    public String searchStudent(@RequestParam("searchId") int id, Model model) {
+        Student student = studentService.findStudentById(id);
+        if (student != null) {
+            model.addAttribute("student", student);
+            model.addAttribute("message", "Студента знайдено!");
+        } else {
+            model.addAttribute("error", "Студента з ID " + id + " не знайдено.");
+        }
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students";
     }
 
-    @PutMapping("/{id}")
-    public String updateStudent(@PathVariable int id, @RequestBody Student student) {
-        studentRepository.update(new Student(id, student.first_name(), student.last_name(), student.year(), student.group_name()));
-        return "Student updated successfully!";
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/delete")
+    public String deleteStudent(@RequestParam("deleteId") int id, Model model) {
+        String result = studentService.deleteStudent(id);
+        if (result.contains("успішно")) {
+            model.addAttribute("message", result);
+        } else {
+            model.addAttribute("error", result);
+        }
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students";
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable int id) {
-        studentRepository.deleteById(id);
-        return "Student deleted successfully!";
+
+    @ExceptionHandler(Exception.class)
+    public String handleError(Exception e, Model model) {
+        model.addAttribute("error", "Виникла помилка: " + e.getMessage());
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students";
     }
 }

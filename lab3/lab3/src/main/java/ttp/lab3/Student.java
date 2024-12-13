@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public record Student(int id,String first_name,String last_name,int year,String group_name) {
+public record Student(Integer id,String first_name,String last_name,int year,String group_name) {
 
 }

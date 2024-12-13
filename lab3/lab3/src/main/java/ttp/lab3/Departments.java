@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public record Departments(int id,String name,String description) {
+public record Departments(Integer id,String name,String description) {
 
 }

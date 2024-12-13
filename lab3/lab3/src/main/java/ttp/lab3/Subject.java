@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public record Subject(int id,String name,int credits,int department_id) {
+public record Subject(Integer id,String name,int credits,int department_id) {
 
 }

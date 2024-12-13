@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public record Teacher(int id,String first_Name,String last_Name,String position,Long department_id) {
+public record Teacher(Integer id,String first_Name,String last_Name,String position,Long department_id) {
 
 }
