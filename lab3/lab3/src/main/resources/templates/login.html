@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login Page</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+.logout {
+    color: green;
+    margin-bottom: 10px;
+}
+fieldset {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+}
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.guest-button {
+    background-color: #808080;
+    margin-top: 10px;
+}
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+</style>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+    <fieldset>
+        <legend>Please Login</legend>
+
+        <!-- Error Message for Failed Login -->
+        <div th:if="${param.error}" class="error">
+            Failed to login.
+            <span th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
+                Reason: <span th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"></span>
+            </span>
+        </div>
+
+        <!-- Logout Success Message -->
+        <div th:if="${param.logout}" class="logout">
+            You have been logged out.
+        </div>
+
+        <!-- Username Input -->
+        <p>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required
+                   placeholder="Enter your username"/>
+        </p>
+
+        <!-- Password Input -->
+        <p>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required
+                   placeholder="Enter your password"/>
+        </p>
+
+        <!-- Remember Me Checkbox -->
+        <p>
+            <label for="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me"/>
+                Remember Me?
+            </label>
+        </p>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <!-- Submit Button -->
+            <button type="submit">Log in</button>
+            
+            <!-- Guest Access Button -->
+            <a th:href="@{/home}">
+                <button type="button" class="guest-button" onclick="window.location.href='/home'; return false;">
+                    Continue as Guest
+                </button>
+            </a>
+        </div>
+    </fieldset>
+</form>
+</body>
+</html>

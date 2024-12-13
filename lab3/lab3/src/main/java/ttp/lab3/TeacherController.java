@@ -1,44 +1,66 @@
 package ttp.lab3;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
+@Controller
 @RequestMapping("/teachers")
 public class TeacherController {
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private TeacherService teacherService;
+
 
     @GetMapping
-    public List<Teacher> getAllTeachers() {
-        return teacherRepository.findAll();
+    public String showTeacherPage(Model model) {
+        model.addAttribute("teachers", teacherService.getAllTeachers());
+        return "teachers"; 
     }
 
-    @GetMapping("/{id}")
-    public Optional<Teacher> getTeacherById(@PathVariable int id) {
-        return teacherRepository.findById(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/save")
+    public String saveTeacher(@ModelAttribute Teacher teacher, Model model) {
+        String result = teacherService.saveTeacher(teacher);
+        model.addAttribute("message", result);
+        model.addAttribute("teachers", teacherService.getAllTeachers());
+        return "teachers";
     }
 
-    @PostMapping
-    public String createTeacher(@RequestBody Teacher teacher) {
-        teacherRepository.save(teacher);
-        return "Teacher created successfully!";
+
+    @PostMapping("/search")
+    public String searchTeacher(@RequestParam("searchId") int id, Model model) {
+        Teacher teacher = teacherService.findTeacherById(id);
+        if (teacher != null) {
+            model.addAttribute("teacher", teacher);
+            model.addAttribute("message", "Викладача знайдено!");
+        } else {
+            model.addAttribute("error", "Викладача з ID " + id + " не знайдено.");
+        }
+        model.addAttribute("teachers", teacherService.getAllTeachers());
+        return "teachers";
     }
 
-    @PutMapping("/{id}")
-    public String updateTeacher(@PathVariable int id, @RequestBody Teacher updatedTeacher) {
-        updatedTeacher = new Teacher(id, updatedTeacher.first_Name(), updatedTeacher.last_Name(), updatedTeacher.position(), updatedTeacher.department_id());
-        teacherRepository.update(updatedTeacher);
-        return "Teacher updated successfully!";
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/delete")
+    public String deleteTeacher(@RequestParam("deleteId") int id, Model model) {
+        String result = teacherService.deleteTeacher(id);
+        if (result.contains("успішно")) {
+            model.addAttribute("message", result);
+        } else {
+            model.addAttribute("error", result);
+        }
+        model.addAttribute("teachers", teacherService.getAllTeachers());
+        return "teachers";
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteTeacher(@PathVariable int id) {
-        teacherRepository.deleteById(id);
-        return "Teacher deleted successfully!";
+
+    @ExceptionHandler(Exception.class)
+    public String handleError(Exception e, Model model) {
+        model.addAttribute("error", "Виникла помилка: " + e.getMessage());
+        model.addAttribute("teachers", teacherService.getAllTeachers());
+        return "teachers";
     }
 }

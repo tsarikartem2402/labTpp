@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Управління студентами</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            padding: 0;
+            color: white;
+            font-size: 1.5em;
+            border: none;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .nav-link.active {
+            background-color: var(--secondary-color);
+            border-left: 4px solid white;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .error {
+            background-color: #fceaea;
+            border: 1px solid #f5c6cb;
+            color: var(--danger-color);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: var(--success-color);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f4f6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form input {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Навігація</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="/students" class="nav-link active">Студенти</a>
+            </li>
+            <li class="nav-item">
+                <a href="/departments" class="nav-link">Кафедри</a>
+            </li>
+            <li class="nav-item">
+                <a href="/subjects" class="nav-link">Предмети</a>
+            </li>
+            <li class="nav-item">
+                <a href="/teachers" class="nav-link">Викладачі</a>
+            </li>
+			<li class="nav-item">
+			    <a href="/home" class="nav-link">Головна сторінка</a>
+			</li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <h1>Управління студентами</h1>
+
+            <!-- Повідомлення про помилки та успішні операції -->
+            <div th:if="${error}" class="error" th:text="${error}"></div>
+            <div th:if="${message}" class="success" th:text="${message}"></div>
+
+            <!-- Форма додавання/оновлення -->
+            <div class="form-container">
+                <h2 th:text="${student != null && student.id() != 0} ? 'Оновити студента' : 'Додати нового студента'"></h2>
+                <form th:action="@{/students/save}" method="post">
+                    <input type="hidden" name="id" th:value="${student?.id()}">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name">Ім'я:</label>
+                            <input id="first_name" type="text" name="first_name" 
+                                   th:value="${student?.first_name()}"
+                                   required minlength="2" maxlength="50"
+                                   pattern="[А-Яа-яҐґЄєІіЇї\s']+"
+                                   title="Введіть ім'я українською мовою">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Прізвище:</label>
+                            <input id="last_name" type="text" name="last_name" 
+                                   th:value="${student?.last_name()}"
+                                   required minlength="2" maxlength="50"
+                                   pattern="[А-Яа-яҐґЄєІіЇї\s']+"
+                                   title="Введіть прізвище українською мовою">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="year">Рік навчання:</label>
+                            <input id="year" type="number" name="year" 
+                                   th:value="${student?.year()}" 
+                                   required min="1" max="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="group_name">Група:</label>
+                            <input id="group_name" type="text" name="group_name" 
+                                   th:value="${student?.group_name()}"
+                                   required pattern="[А-Яа-яҐґЄєІіЇї0-9\-]+"
+                                   title="Введіть назву групи українською мовою">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <span th:text="${student != null && student.id() != 0} ? 'Оновити' : 'Додати'"></span>
+                    </button>
+                    <button type="reset" class="btn-danger" 
+                            th:if="${student != null && student.id() != 0}"
+                            onclick="window.location.href='/students'">
+                        Скасувати
+                    </button>
+                </form>
+            </div>
+
+            <!-- Форма пошуку -->
+            <div class="form-container">
+                <h2>Пошук студента</h2>
+                <form th:action="@{/students/search}" method="post" class="search-form">
+                    <div class="form-group">
+                        <input type="number" name="searchId" placeholder="Введіть ID студента" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Знайти</button>
+                </form>
+            </div>
+
+            <!-- Таблиця студентів -->
+            <h2>Список студентів</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Прізвище</th>
+                        <th>Ім'я</th>
+                        <th>Рік</th>
+                        <th>Група</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${students}">
+                        <td th:text="${student.id()}"></td>
+                        <td th:text="${student.last_name()}"></td>
+                        <td th:text="${student.first_name()}"></td>
+                        <td th:text="${student.year()}"></td>
+                        <td th:text="${student.group_name()}"></td>
+                        <td class="action-buttons">
+                            <form th:action="@{/students/search}" method="post" style="display: inline;">
+                                <input type="hidden" name="searchId" th:value="${student.id()}">
+                                <button type="submit" class="btn-primary">Редагувати</button>
+                            </form>
+                            <form th:action="@{/students/delete}" method="post" style="display: inline;"
+                                  onsubmit="return confirm('Ви впевнені, що хочете видалити цього студента?');">
+                                <input type="hidden" name="deleteId" th:value="${student.id()}">
+                                <button type="submit" class="btn-danger">Видалити</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(students)}">
+                        <td colspan="6" style="text-align: center;">Студентів не знайдено</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
